@@ -6,13 +6,18 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
@@ -53,6 +58,13 @@ fun LoginScreen() {
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally,
   ) {
+    Icon(
+      imageVector = Icons.Filled.AccountCircle,
+      contentDescription = "Profile",
+      modifier = Modifier.size(72.dp),
+      tint = MaterialTheme.colorScheme.primary,
+    )
+    Spacer(Modifier.height(16.dp))
     Text("Login", style = MaterialTheme.typography.headlineLarge)
     Spacer(Modifier.height(24.dp))
 
@@ -99,6 +111,17 @@ fun LoginScreen() {
       modifier = Modifier.fillMaxWidth(),
     ) {
       Text("Login")
+    }
+    Spacer(Modifier.height(8.dp))
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      horizontalArrangement = Arrangement.Center,
+      verticalAlignment = Alignment.CenterVertically,
+    ) {
+      Text("Don't have an account?")
+      TextButton(onClick = { }) {
+        Text("Sign Up")
+      }
     }
   }
 }
