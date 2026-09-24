@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.contact.databinding.ItemContactBinding
 
-class ContactAdapter : ListAdapter<Contact, ContactAdapter.ContactViewHolder>(DiffCallback) {
+class ContactAdapter(
+  private val onClick: (Contact) -> Unit,
+  private val onLongClick: (Contact) -> Unit,
+) : ListAdapter<Contact, ContactAdapter.ContactViewHolder>(DiffCallback) {
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
     val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -15,16 +18,25 @@ class ContactAdapter : ListAdapter<Contact, ContactAdapter.ContactViewHolder>(Di
   }
 
   override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
-    holder.bind(getItem(position))
+    holder.bind(getItem(position), onClick, onLongClick)
   }
 
   class ContactViewHolder(
     private val binding: ItemContactBinding,
   ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(contact: Contact) {
+    fun bind(
+      contact: Contact,
+      onClick: (Contact) -> Unit,
+      onLongClick: (Contact) -> Unit,
+    ) {
       binding.avatar.text = contact.name.take(1).uppercase()
       binding.name.text = contact.name
       binding.phone.text = contact.phone
+      binding.root.setOnClickListener { onClick(contact) }
+      binding.root.setOnLongClickListener {
+        onLongClick(contact)
+        true
+      }
     }
   }
 

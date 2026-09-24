@@ -19,10 +19,13 @@ class MainActivity : ComponentActivity() {
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    val adapter = ContactAdapter()
+    val adapter = ContactAdapter(
+      onClick = { showContactDialog(it) },
+      onLongClick = { confirmDelete(it) },
+    )
     binding.contactList.layoutManager = LinearLayoutManager(this)
     binding.contactList.adapter = adapter
-    binding.addButton.setOnClickListener { showContactDialog() }
+    binding.addButton.setOnClickListener { showContactDialog(null) }
 
     viewModel.contacts.observe(this) { contacts ->
       adapter.submitList(contacts)
@@ -30,11 +33,15 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun showContactDialog() {
+  private fun showContactDialog(existing: Contact?) {
     val dialogBinding = DialogContactBinding.inflate(layoutInflater)
+    existing?.let {
+      dialogBinding.nameInput.setText(it.name)
+      dialogBinding.phoneInput.setText(it.phone)
+    }
 
     val dialog = MaterialAlertDialogBuilder(this)
-      .setTitle(R.string.add_contact)
+      .setTitle(if (existing == null) R.string.add_contact else R.string.edit_contact)
       .setView(dialogBinding.root)
       .setNegativeButton(R.string.cancel, null)
       .setPositiveButton(R.string.save, null)
@@ -45,7 +52,11 @@ class MainActivity : ComponentActivity() {
       val name = dialogBinding.nameInput.text?.toString().orEmpty().trim()
       val phone = dialogBinding.phoneInput.text?.toString().orEmpty().trim()
       if (validate(dialogBinding, name, phone)) {
-        viewModel.addContact(name, phone)
+        if (existing == null) {
+          viewModel.addContact(name, phone)
+        } else {
+          viewModel.updateContact(existing.id, name, phone)
+        }
         dialog.dismiss()
       }
     }
@@ -67,5 +78,13 @@ class MainActivity : ComponentActivity() {
       valid = false
     }
     return valid
+  }
+
+  private fun confirmDelete(contact: Contact) {
+    MaterialAlertDialogBuilder(this)
+      .setTitle(getString(R.string.delete_confirm, contact.name))
+      .setNegativeButton(R.string.cancel, null)
+      .setPositiveButton(R.string.delete) { _, _ -> viewModel.deleteContact(contact.id) }
+      .show()
   }
 }
