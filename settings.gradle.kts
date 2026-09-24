@@ -17,4 +17,4 @@ plugins {
   id("io.github.ben-manes.versions.settings") version "0.61.0"
 }
 rootProject.name = "kotlin-starter"
-include(":login", ":calc")
+include(":login", ":calc", ":contact")
