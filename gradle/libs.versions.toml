@@ -10,6 +10,8 @@ material = "1.14.0"
 lifecycle = "2.11.0"
 coreTesting = "2.2.0"
 junit = "4.13.2"
+navigation = "2.10.2"
+appcompat = "1.8.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -26,6 +28,9 @@ material = { group = "com.google.android.material", name = "material", version.r
 lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityCompose" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
+navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTesting" }
 
