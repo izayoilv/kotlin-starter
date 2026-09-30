@@ -7,7 +7,20 @@
   <fragment
     android:id="@+id/home"
     android:name="com.example.newsreader.HomeFragment"
-    android:label="@string/tab_home" />
+    android:label="@string/tab_home">
+    <action
+      android:id="@+id/action_home_to_detail"
+      app:destination="@id/articleDetail" />
+  </fragment>
+
+  <fragment
+    android:id="@+id/articleDetail"
+    android:name="com.example.newsreader.ArticleDetailFragment">
+    <argument
+      android:name="articleId"
+      android:defaultValue="-1"
+      app:argType="integer" />
+  </fragment>
 
   <fragment
     android:id="@+id/profile"
