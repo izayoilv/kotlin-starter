@@ -10,7 +10,7 @@ class ArticleDataTest {
   @Test
   fun `articles have unique ids`() {
     val ids = ArticleData.articles.map { it.id }
-    assertEquals(ids.size, ids.toSet().size)
+    assertEquals(listOf(1, 2, 3, 4, 5), ids)
   }
 
   @Test
