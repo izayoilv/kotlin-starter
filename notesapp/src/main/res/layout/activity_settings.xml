@@ -2,67 +2,74 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="24dp">
+  android:fitsSystemWindows="true"
+  android:orientation="vertical">
 
-  <com.google.android.material.textfield.TextInputLayout
-    android:id="@+id/nameLayout"
+  <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/name_hint">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp">
 
-    <com.google.android.material.textfield.TextInputEditText
-      android:id="@+id/nameInput"
+    <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/nameLayout"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:inputType="textPersonName"
-      android:maxLines="1" />
-  </com.google.android.material.textfield.TextInputLayout>
+      android:hint="@string/name_hint">
 
-  <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:text="@string/font_size_label"
-    android:textAppearance="?attr/textAppearanceTitleMedium" />
+      <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nameInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-  <RadioGroup
-    android:id="@+id/fontGroup"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:orientation="vertical">
-
-    <RadioButton
-      android:id="@+id/fontSmall"
+    <TextView
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/font_small" />
+      android:layout_marginTop="24dp"
+      android:text="@string/font_size_label"
+      android:textAppearance="?attr/textAppearanceTitleMedium" />
 
-    <RadioButton
-      android:id="@+id/fontMedium"
+    <RadioGroup
+      android:id="@+id/fontGroup"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="@string/font_medium" />
+      android:layout_marginTop="8dp"
+      android:orientation="vertical">
 
-    <RadioButton
-      android:id="@+id/fontLarge"
-      android:layout_width="wrap_content"
+      <RadioButton
+        android:id="@+id/fontSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/font_small" />
+
+      <RadioButton
+        android:id="@+id/fontMedium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/font_medium" />
+
+      <RadioButton
+        android:id="@+id/fontLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/font_large" />
+    </RadioGroup>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+      android:id="@+id/showInfoSwitch"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:text="@string/font_large" />
-  </RadioGroup>
+      android:layout_marginTop="24dp"
+      android:text="@string/show_info" />
 
-  <com.google.android.material.switchmaterial.SwitchMaterial
-    android:id="@+id/showInfoSwitch"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
-    android:text="@string/show_info" />
-
-  <Button
-    android:id="@+id/saveButton"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="32dp"
-    android:text="@string/save" />
+    <Button
+      android:id="@+id/saveButton"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="32dp"
+      android:text="@string/save" />
+  </LinearLayout>
 </LinearLayout>
