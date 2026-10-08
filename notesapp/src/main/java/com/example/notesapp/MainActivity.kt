@@ -11,6 +11,7 @@ import com.example.notesapp.databinding.ActivityMainBinding
 import com.example.notesapp.databinding.DialogNoteEditorBinding
 import com.example.notesapp.databinding.DialogNoteViewerBinding
 import java.io.File
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
   private lateinit var binding: ActivityMainBinding
@@ -22,9 +23,9 @@ class MainActivity : AppCompatActivity() {
     registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
       if (uri != null) {
         try {
-          contentResolver.openOutputStream(uri)?.use { stream ->
-            stream.write(storage.exportJson().toByteArray())
-          }
+          val stream = contentResolver.openOutputStream(uri)
+            ?: throw IOException("Export destination unavailable")
+          stream.use { it.write(storage.exportJson().toByteArray()) }
           Toast.makeText(this, R.string.export_success, Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
           Toast.makeText(this, R.string.export_failed, Toast.LENGTH_SHORT).show()
