@@ -3,6 +3,8 @@ package com.example.notesapp
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.notesapp.databinding.ActivityMainBinding
@@ -15,6 +17,20 @@ class MainActivity : AppCompatActivity() {
   private lateinit var storage: NoteStorage
   private lateinit var prefs: PrefsManager
   private lateinit var adapter: NoteAdapter
+
+  private val exportLauncher =
+    registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+      if (uri != null) {
+        try {
+          contentResolver.openOutputStream(uri)?.use { stream ->
+            stream.write(storage.exportJson().toByteArray())
+          }
+          Toast.makeText(this, R.string.export_success, Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+          Toast.makeText(this, R.string.export_failed, Toast.LENGTH_SHORT).show()
+        }
+      }
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -29,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     binding.addButton.setOnClickListener { showAddDialog() }
     binding.settingsButton.setOnClickListener {
       startActivity(Intent(this, SettingsActivity::class.java))
+    }
+    binding.exportButton.setOnClickListener {
+      exportLauncher.launch("notes-export.json")
     }
     binding.noteList.setOnItemClickListener { _, _, position, _ ->
       showReadDialog(adapter.getItem(position))
