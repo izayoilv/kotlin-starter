@@ -43,17 +43,20 @@ class TaskViewModel(private val repository: TaskRepository) : ViewModel() {
   }
 
   fun delete(task: Task) {
-    write { repository.delete(task) }
+    write(onSuccess = { _events.send(UiEvent.TaskDeleted(task)) }) {
+      repository.delete(task)
+    }
   }
 
   fun restore(task: Task) {
     write { repository.restore(task) }
   }
 
-  private fun write(block: suspend () -> Unit) {
+  private fun write(onSuccess: suspend () -> Unit = {}, block: suspend () -> Unit) {
     viewModelScope.launch {
       try {
         block()
+        onSuccess()
       } catch (e: CancellationException) {
         throw e
       } catch (_: Exception) {

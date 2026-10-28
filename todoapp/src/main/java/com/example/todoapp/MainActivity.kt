@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
     adapter = TaskAdapter(
       onDoneChanged = viewModel::setDone,
-      onDelete = ::deleteWithUndo,
+      onDelete = viewModel::delete,
     )
     binding.rvTasks.layoutManager = LinearLayoutManager(this)
     binding.rvTasks.adapter = adapter
@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.events.collect { event ->
           when (event) {
             UiEvent.DatabaseError -> showDatabaseError()
+            is UiEvent.TaskDeleted -> showDeletedUndo(event.task)
           }
         }
       }
@@ -107,14 +108,13 @@ class MainActivity : AppCompatActivity() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
           val position = viewHolder.bindingAdapterPosition
           if (position == RecyclerView.NO_POSITION) return
-          deleteWithUndo(adapter.currentList[position])
+          viewModel.delete(adapter.currentList[position])
         }
       },
     ).attachToRecyclerView(binding.rvTasks)
   }
 
-  private fun deleteWithUndo(task: Task) {
-    viewModel.delete(task)
+  private fun showDeletedUndo(task: Task) {
     Snackbar.make(binding.root, R.string.task_deleted, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo) { viewModel.restore(task) }
       .show()

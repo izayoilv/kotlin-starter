@@ -3,7 +3,6 @@ package com.example.todoapp.ui
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.DialogFragment
 import com.example.todoapp.R
@@ -19,7 +18,10 @@ class AddTaskDialogFragment : DialogFragment() {
     binding = viewBinding
     draftTitle = savedInstanceState?.getString(KEY_DRAFT)
     viewBinding.etTitle.setText(draftTitle)
-    viewBinding.etTitle.doOnTextChanged { text, _, _, _ -> draftTitle = text?.toString() }
+    viewBinding.etTitle.doOnTextChanged { text, _, _, _ ->
+      draftTitle = text?.toString()
+      viewBinding.tilTitle.error = null
+    }
 
     return MaterialAlertDialogBuilder(requireContext())
       .setTitle(R.string.add_task)
@@ -36,7 +38,7 @@ class AddTaskDialogFragment : DialogFragment() {
             } else {
               parentFragmentManager.setFragmentResult(
                 REQUEST_KEY,
-                bundleOf(KEY_TITLE to title),
+                Bundle().apply { putString(KEY_TITLE, title) },
               )
               dismiss()
             }

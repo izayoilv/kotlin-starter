@@ -19,7 +19,7 @@ abstract class TodoDatabase : RoomDatabase() {
           context.applicationContext,
           TodoDatabase::class.java,
           "todo.db",
-        ).fallbackToDestructiveMigration().build().also { instance = it }
+        ).fallbackToDestructiveMigration(dropAllTables = true).build().also { instance = it }
       }
   }
 }

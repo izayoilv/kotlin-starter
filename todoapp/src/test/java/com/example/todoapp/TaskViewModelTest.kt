@@ -14,7 +14,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -96,14 +98,36 @@ class TaskViewModelTest {
     advanceUntilIdle()
     assertEquals(UiEvent.DatabaseError, event.await())
   }
+
+  @Test
+  fun deleteEmitsTaskDeleted() = runTest(dispatcher) {
+    viewModel.addTask("A")
+    advanceUntilIdle()
+    val task = repository.tasks.value.single()
+    val event = async { viewModel.events.first() }
+    viewModel.delete(task)
+    advanceUntilIdle()
+    assertEquals(UiEvent.TaskDeleted(task), event.await())
+  }
+
+  @Test
+  fun readFailureEmitsDatabaseErrorAndEmptyList() = runTest(dispatcher) {
+    repository.failReads = true
+    val event = async { viewModel.events.first() }
+    assertTrue(viewModel.tasks.getOrAwaitValue { advanceUntilIdle() }.isEmpty())
+    assertEquals(UiEvent.DatabaseError, event.await())
+  }
 }
 
 private class FakeTaskRepository : TaskRepository {
   val tasks = MutableStateFlow<List<Task>>(emptyList())
   var failWrites = false
+  var failReads = false
   private var nextId = 1L
 
-  override fun observeTasks(): Flow<List<Task>> = tasks
+  override fun observeTasks(): Flow<List<Task>> = flow {
+    if (failReads) error("read failed") else emitAll(tasks)
+  }
 
   override fun observeUnfinishedCount(): Flow<Int> =
     tasks.map { list -> list.count { !it.isDone } }
@@ -133,12 +157,13 @@ private class FakeTaskRepository : TaskRepository {
   }
 }
 
+@Suppress("UNCHECKED_CAST")
 private fun <T> LiveData<T>.getOrAwaitValue(afterObserve: () -> Unit = {}): T {
-  var value: T? = null
+  var result: T? = null
   val latch = CountDownLatch(1)
   val observer = object : Observer<T> {
-    override fun onChanged(current: T) {
-      value = current
+    override fun onChanged(value: T) {
+      result = value
       latch.countDown()
       this@getOrAwaitValue.removeObserver(this)
     }
@@ -146,5 +171,5 @@ private fun <T> LiveData<T>.getOrAwaitValue(afterObserve: () -> Unit = {}): T {
   observeForever(observer)
   afterObserve()
   check(latch.await(2, TimeUnit.SECONDS)) { "LiveData value was never set." }
-  return value as T
+  return result as T
 }
