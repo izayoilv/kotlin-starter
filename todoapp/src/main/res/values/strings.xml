@@ -1,0 +1,19 @@
+<resources>
+  <string name="app_name">Todo List</string>
+  <string name="add_task">Tambah Tugas</string>
+  <string name="task_title_hint">Judul tugas</string>
+  <string name="error_title_required">Judul tugas tidak boleh kosong</string>
+  <string name="save">Simpan</string>
+  <string name="cancel">Batal</string>
+  <string name="delete_task">Hapus tugas</string>
+  <string name="add_task_fab">Tambah tugas</string>
+  <string name="task_done">Tandai selesai</string>
+  <string name="task_deleted">Tugas dihapus</string>
+  <string name="undo">Urungkan</string>
+  <string name="empty_title">Belum ada tugas</string>
+  <string name="empty_hint">Tekan tombol + untuk menambah tugas</string>
+  <string name="error_database">Gagal menyimpan data</string>
+  <plurals name="unfinished_tasks">
+    <item quantity="other">%d tugas belum selesai</item>
+  </plurals>
+</resources>
