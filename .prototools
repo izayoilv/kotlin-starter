@@ -1,0 +1,5 @@
+java = "temurin-21"
+kotlin = "2.4.20"
+
+[settings]
+unstable-lockfile = true
