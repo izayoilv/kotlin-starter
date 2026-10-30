@@ -89,6 +89,18 @@ class PostDetailViewModelTest {
     assertEquals(2, repository.getPostCalls)
   }
 
+  @Test
+  fun sameIdWhileLoadingDoesNotRefetch() = runTest(dispatcher) {
+    repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
+    val viewModel = PostDetailViewModel(repository)
+
+    viewModel.load(7)
+    viewModel.load(7)
+    advanceUntilIdle()
+
+    assertEquals(1, repository.getPostCalls)
+  }
+
   private fun httpException(code: Int): retrofit2.HttpException =
     retrofit2.HttpException(
       retrofit2.Response.error<Any>(
