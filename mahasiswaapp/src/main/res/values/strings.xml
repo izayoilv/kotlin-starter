@@ -1,0 +1,35 @@
+<resources>
+  <string name="app_name">CRUD Mahasiswa</string>
+  <string name="title_list">CRUD Mahasiswa</string>
+  <string name="title_add">Tambah Mahasiswa</string>
+  <string name="title_edit">Edit Mahasiswa</string>
+  <string name="title_detail">Detail Mahasiswa</string>
+  <string name="nim_hint">NIM</string>
+  <string name="nama_hint">Nama Lengkap</string>
+  <string name="jurusan_hint">Jurusan</string>
+  <string name="email_hint">Email</string>
+  <string name="save">Simpan</string>
+  <string name="saving">Menyimpan...</string>
+  <string name="edit">Edit</string>
+  <string name="delete">Hapus</string>
+  <string name="delete_title">Hapus Data</string>
+  <string name="delete_message">Apakah Anda yakin ingin menghapus data %1$s?</string>
+  <string name="cancel">Batal</string>
+  <string name="retry">Coba lagi</string>
+  <string name="empty">Belum ada data mahasiswa</string>
+  <string name="loading">Memuat data</string>
+  <string name="error_network">Tidak dapat terhubung ke server. Periksa koneksi.</string>
+  <string name="error_http">Permintaan gagal (kode %1$d).</string>
+  <string name="error_generic">Terjadi kesalahan.</string>
+  <string name="error_nim_required">NIM tidak boleh kosong</string>
+  <string name="error_nama_required">Nama tidak boleh kosong</string>
+  <string name="error_jurusan_required">Jurusan tidak boleh kosong</string>
+  <string name="error_email_required">Email tidak boleh kosong</string>
+  <string name="error_email_invalid">Format email tidak valid</string>
+  <string name="nim_label">NIM: %1$s</string>
+  <string name="jurusan_label">Jurusan: %1$s</string>
+  <string name="email_label">Email: %1$s</string>
+  <string name="add_mahasiswa">Tambah mahasiswa</string>
+  <string name="success_generic">Berhasil</string>
+  <string name="back">Kembali</string>
+</resources>
