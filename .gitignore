@@ -11,3 +11,5 @@ local.properties
 google-services.json
 .cxx/
 .kotlin/
+mahasiswaapi/*.db
+mahasiswaapi/*.db-journal
