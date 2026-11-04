@@ -17,7 +17,7 @@ class NetworkMahasiswaRepository(
     if (response.status == "success" && response.data != null) {
       response.data
     } else {
-      throw ApiException(response.message ?: "Gagal memuat data")
+      throw ApiException(response.message.orEmpty())
     }
   }
 
@@ -34,8 +34,8 @@ class NetworkMahasiswaRepository(
   }
 
   private fun ApiMessageResponse.requireSuccess(): String {
-    if (status != "success") throw ApiException(message ?: "Gagal memproses data")
-    return message ?: "Berhasil"
+    if (status != "success") throw ApiException(message.orEmpty())
+    return message.orEmpty()
   }
 
   private suspend fun <T> safeCall(block: suspend () -> T): Result<T> =
