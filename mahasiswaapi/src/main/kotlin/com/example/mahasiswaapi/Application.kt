@@ -1,5 +1,6 @@
 package com.example.mahasiswaapi
 
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.gson.gson
 import io.ktor.server.application.Application
 import io.ktor.server.application.ApplicationCall
@@ -15,6 +16,7 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
+import kotlinx.coroutines.CancellationException
 
 fun main() {
   embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
@@ -36,17 +38,17 @@ fun Application.module() {
     }
 
     post("/create.php") {
-      val mahasiswa = call.receive<Mahasiswa>()
+      val mahasiswa = call.receiveOrNull<Mahasiswa>() ?: return@post
       call.respondResult(Database.create(mahasiswa))
     }
 
     put("/update.php") {
-      val mahasiswa = call.receive<Mahasiswa>()
+      val mahasiswa = call.receiveOrNull<Mahasiswa>() ?: return@put
       call.respondResult(Database.update(mahasiswa))
     }
 
     delete("/delete.php") {
-      val mahasiswa = call.receive<Mahasiswa>()
+      val mahasiswa = call.receiveOrNull<Mahasiswa>() ?: return@delete
       call.respondResult(Database.delete(mahasiswa.id))
     }
   }
@@ -58,3 +60,13 @@ private suspend fun ApplicationCall.respondResult(result: DbResult) {
     is DbResult.Error -> respond(MessageResponse("error", result.message))
   }
 }
+
+private suspend inline fun <reified T : Any> ApplicationCall.receiveOrNull(): T? =
+  try {
+    receive<T>()
+  } catch (e: CancellationException) {
+    throw e
+  } catch (_: Exception) {
+    respond(HttpStatusCode.BadRequest, MessageResponse("error", "Permintaan tidak valid"))
+    null
+  }

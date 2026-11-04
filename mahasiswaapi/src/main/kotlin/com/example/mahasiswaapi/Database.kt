@@ -2,6 +2,7 @@ package com.example.mahasiswaapi
 
 import java.sql.Connection
 import java.sql.DriverManager
+import java.sql.SQLException
 
 object Database {
   private val url = "jdbc:sqlite:" + (System.getenv("MAHASISWA_DB") ?: "mahasiswa.db")
@@ -9,6 +10,7 @@ object Database {
   init {
     Class.forName("org.sqlite.JDBC")
     connection().use { conn ->
+      conn.createStatement().use { it.execute("PRAGMA journal_mode = WAL") }
       conn.createStatement().use { statement ->
         statement.executeUpdate(
           """
@@ -31,7 +33,9 @@ object Database {
     }
   }
 
-  private fun connection(): Connection = DriverManager.getConnection(url)
+  private fun connection(): Connection = DriverManager.getConnection(url).apply {
+    createStatement().use { it.execute("PRAGMA busy_timeout = 5000") }
+  }
 
   private fun seed(conn: Connection) {
     listOf(
@@ -64,7 +68,12 @@ object Database {
   fun create(mahasiswa: Mahasiswa): DbResult {
     connection().use { conn ->
       if (nimExists(conn, mahasiswa.nim, null)) return DbResult.Error("NIM sudah terdaftar")
-      insert(conn, mahasiswa)
+      try {
+        insert(conn, mahasiswa)
+      } catch (e: SQLException) {
+        if (e.isUniqueViolation()) return DbResult.Error("NIM sudah terdaftar")
+        throw e
+      }
     }
     return DbResult.Success("Data berhasil ditambahkan")
   }
@@ -75,15 +84,20 @@ object Database {
       if (nimExists(conn, mahasiswa.nim, mahasiswa.id)) {
         return DbResult.Error("NIM sudah digunakan mahasiswa lain")
       }
-      conn.prepareStatement(
-        "UPDATE mahasiswa SET nim = ?, nama = ?, jurusan = ?, email = ? WHERE id = ?",
-      ).use { ps ->
-        ps.setString(1, mahasiswa.nim)
-        ps.setString(2, mahasiswa.nama)
-        ps.setString(3, mahasiswa.jurusan)
-        ps.setString(4, mahasiswa.email)
-        ps.setInt(5, mahasiswa.id)
-        ps.executeUpdate()
+      try {
+        conn.prepareStatement(
+          "UPDATE mahasiswa SET nim = ?, nama = ?, jurusan = ?, email = ? WHERE id = ?",
+        ).use { ps ->
+          ps.setString(1, mahasiswa.nim)
+          ps.setString(2, mahasiswa.nama)
+          ps.setString(3, mahasiswa.jurusan)
+          ps.setString(4, mahasiswa.email)
+          ps.setInt(5, mahasiswa.id)
+          ps.executeUpdate()
+        }
+      } catch (e: SQLException) {
+        if (e.isUniqueViolation()) return DbResult.Error("NIM sudah digunakan mahasiswa lain")
+        throw e
       }
     }
     return DbResult.Success("Data berhasil diupdate")
@@ -130,4 +144,7 @@ object Database {
       ps.setInt(1, id)
       ps.executeQuery().use { it.next() }
     }
+
+  private fun SQLException.isUniqueViolation(): Boolean =
+    message?.contains("UNIQUE", ignoreCase = true) == true
 }

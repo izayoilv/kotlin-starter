@@ -19,7 +19,7 @@
   <string name="empty">Belum ada data mahasiswa</string>
   <string name="loading">Memuat data</string>
   <string name="error_network">Tidak dapat terhubung ke server. Periksa koneksi.</string>
-  <string name="error_http">Gagal memuat data (kode %1$d).</string>
+  <string name="error_http">Permintaan gagal (kode %1$d).</string>
   <string name="error_generic">Terjadi kesalahan.</string>
   <string name="error_nim_required">NIM tidak boleh kosong</string>
   <string name="error_nama_required">Nama tidak boleh kosong</string>
