@@ -30,4 +30,6 @@
   <string name="jurusan_label">Jurusan: %1$s</string>
   <string name="email_label">Email: %1$s</string>
   <string name="add_mahasiswa">Tambah mahasiswa</string>
+  <string name="success_generic">Berhasil</string>
+  <string name="back">Kembali</string>
 </resources>
