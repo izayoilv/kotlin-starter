@@ -1,12 +1,12 @@
 package com.example.postsapp.data
 
-import java.io.IOException
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
+import java.io.IOException
 
 class LoadErrorTest {
   @Test
@@ -16,9 +16,10 @@ class LoadErrorTest {
 
   @Test
   fun httpExceptionMapsToHttpCode() {
-    val exception = HttpException(
-      Response.error<Any>(404, "".toResponseBody("text/plain".toMediaType())),
-    )
+    val exception =
+      HttpException(
+        Response.error<Any>(404, "".toResponseBody("text/plain".toMediaType())),
+      )
     assertEquals(LoadError.Http(404), exception.toLoadError())
   }
 

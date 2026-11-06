@@ -11,4 +11,6 @@ data class ApiMessageResponse(
   val message: String? = null,
 )
 
-class ApiException(message: String) : Exception(message)
+class ApiException(
+  message: String,
+) : Exception(message)

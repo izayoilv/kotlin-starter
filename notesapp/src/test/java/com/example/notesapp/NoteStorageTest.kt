@@ -15,8 +15,11 @@ class NoteStorageTest {
 
   private fun storage() = NoteStorage(temp.root)
 
-  private fun note(id: Long, title: String = "Judul", createdAt: Long = id) =
-    Note(id = id, title = title, body = "Isi $id", author = "Ani", createdAt = createdAt)
+  private fun note(
+    id: Long,
+    title: String = "Judul",
+    createdAt: Long = id,
+  ) = Note(id = id, title = title, body = "Isi $id", author = "Ani", createdAt = createdAt)
 
   @Test
   fun `save then list returns the note`() {

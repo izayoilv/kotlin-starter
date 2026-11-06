@@ -8,11 +8,22 @@ data class Mahasiswa(
   val email: String,
 )
 
-data class ListResponse(val status: String, val data: List<Mahasiswa>)
+data class ListResponse(
+  val status: String,
+  val data: List<Mahasiswa>,
+)
 
-data class MessageResponse(val status: String, val message: String)
+data class MessageResponse(
+  val status: String,
+  val message: String,
+)
 
 sealed interface DbResult {
-  data class Success(val message: String) : DbResult
-  data class Error(val message: String) : DbResult
+  data class Success(
+    val message: String,
+  ) : DbResult
+
+  data class Error(
+    val message: String,
+  ) : DbResult
 }

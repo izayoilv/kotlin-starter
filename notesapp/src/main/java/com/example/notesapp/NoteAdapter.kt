@@ -15,10 +15,12 @@ class NoteAdapter(
   private var notes: List<Note>,
   private var fontSizeSp: Float,
 ) : BaseAdapter() {
-
   private val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
 
-  fun submit(notes: List<Note>, fontSizeSp: Float) {
+  fun submit(
+    notes: List<Note>,
+    fontSizeSp: Float,
+  ) {
     this.notes = notes
     this.fontSizeSp = fontSizeSp
     notifyDataSetChanged()
@@ -30,7 +32,11 @@ class NoteAdapter(
 
   override fun getItemId(position: Int): Long = notes[position].id
 
-  override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+  override fun getView(
+    position: Int,
+    convertView: View?,
+    parent: ViewGroup,
+  ): View {
     val view = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_note, parent, false)
     val note = notes[position]
     val title = view.findViewById<TextView>(R.id.noteTitle)

@@ -14,13 +14,18 @@ class MahasiswaAdapter(
   private val onEdit: (Mahasiswa) -> Unit,
   private val onDelete: (Mahasiswa) -> Unit,
 ) : ListAdapter<Mahasiswa, MahasiswaAdapter.ViewHolder>(DiffCallback) {
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): ViewHolder {
     val binding = ItemMahasiswaBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return ViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: ViewHolder,
+    position: Int,
+  ) {
     holder.bind(getItem(position))
   }
 
@@ -39,10 +44,14 @@ class MahasiswaAdapter(
   }
 
   private object DiffCallback : DiffUtil.ItemCallback<Mahasiswa>() {
-    override fun areItemsTheSame(oldItem: Mahasiswa, newItem: Mahasiswa): Boolean =
-      oldItem.id == newItem.id
+    override fun areItemsTheSame(
+      oldItem: Mahasiswa,
+      newItem: Mahasiswa,
+    ): Boolean = oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: Mahasiswa, newItem: Mahasiswa): Boolean =
-      oldItem == newItem
+    override fun areContentsTheSame(
+      oldItem: Mahasiswa,
+      newItem: Mahasiswa,
+    ): Boolean = oldItem == newItem
   }
 }

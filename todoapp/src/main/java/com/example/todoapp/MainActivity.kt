@@ -42,10 +42,11 @@ class MainActivity : AppCompatActivity() {
     setSupportActionBar(binding.toolbar)
     applyFabBottomInset()
 
-    adapter = TaskAdapter(
-      onDoneChanged = viewModel::setDone,
-      onDelete = viewModel::delete,
-    )
+    adapter =
+      TaskAdapter(
+        onDoneChanged = viewModel::setDone,
+        onDelete = viewModel::delete,
+      )
     binding.rvTasks.layoutManager = LinearLayoutManager(this)
     binding.rvTasks.adapter = adapter
     attachSwipeToDelete()
@@ -105,7 +106,10 @@ class MainActivity : AppCompatActivity() {
           target: RecyclerView.ViewHolder,
         ): Boolean = false
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(
+          viewHolder: RecyclerView.ViewHolder,
+          direction: Int,
+        ) {
           val position = viewHolder.bindingAdapterPosition
           if (position == RecyclerView.NO_POSITION) return
           viewModel.delete(adapter.currentList[position])
@@ -115,7 +119,8 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun showDeletedUndo(task: Task) {
-    Snackbar.make(binding.root, R.string.task_deleted, Snackbar.LENGTH_LONG)
+    Snackbar
+      .make(binding.root, R.string.task_deleted, Snackbar.LENGTH_LONG)
       .setAction(R.string.undo) { viewModel.restore(task) }
       .show()
   }

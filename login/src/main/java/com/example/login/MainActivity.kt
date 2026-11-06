@@ -74,10 +74,11 @@ fun LoginScreen() {
       label = { Text("Username") },
       placeholder = { Text("Enter username") },
       singleLine = true,
-      keyboardOptions = KeyboardOptions(
-        keyboardType = KeyboardType.Text,
-        imeAction = ImeAction.Next,
-      ),
+      keyboardOptions =
+        KeyboardOptions(
+          keyboardType = KeyboardType.Text,
+          imeAction = ImeAction.Next,
+        ),
       modifier = Modifier.fillMaxWidth(),
     )
     Spacer(Modifier.height(12.dp))
@@ -89,10 +90,11 @@ fun LoginScreen() {
       placeholder = { Text("Enter password") },
       singleLine = true,
       visualTransformation = PasswordVisualTransformation(),
-      keyboardOptions = KeyboardOptions(
-        keyboardType = KeyboardType.Password,
-        imeAction = ImeAction.Done,
-      ),
+      keyboardOptions =
+        KeyboardOptions(
+          keyboardType = KeyboardType.Password,
+          imeAction = ImeAction.Done,
+        ),
       modifier = Modifier.fillMaxWidth(),
     )
 

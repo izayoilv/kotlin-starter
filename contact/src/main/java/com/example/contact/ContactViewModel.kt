@@ -10,15 +10,23 @@ class ContactViewModel : ViewModel() {
 
   private var nextId = 1L
 
-  fun addContact(name: String, phone: String) {
+  fun addContact(
+    name: String,
+    phone: String,
+  ) {
     val contact = Contact(id = nextId++, name = name, phone = phone)
     _contacts.value = _contacts.value.orEmpty() + contact
   }
 
-  fun updateContact(id: Long, name: String, phone: String) {
-    _contacts.value = _contacts.value.orEmpty().map {
-      if (it.id == id) it.copy(name = name, phone = phone) else it
-    }
+  fun updateContact(
+    id: Long,
+    name: String,
+    phone: String,
+  ) {
+    _contacts.value =
+      _contacts.value.orEmpty().map {
+        if (it.id == id) it.copy(name = name, phone = phone) else it
+      }
   }
 
   fun deleteContact(id: Long) {

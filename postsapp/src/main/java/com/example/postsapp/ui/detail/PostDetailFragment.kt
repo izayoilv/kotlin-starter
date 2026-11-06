@@ -29,7 +29,10 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
 
   private val postId: Int by lazy { requireArguments().getInt(NavArgs.POST_ID) }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
     _binding = FragmentPostDetailBinding.bind(view)
 
@@ -49,21 +52,28 @@ class PostDetailFragment : Fragment(R.layout.fragment_post_detail) {
     binding.errorGroup.isVisible = state is UiState.Error
 
     when (state) {
-      UiState.Loading -> Unit
+      UiState.Loading -> {
+        return
+      }
+
       is UiState.Success -> {
         binding.tvPostId.text = getString(R.string.post_number, state.data.id)
         binding.tvTitle.text = state.data.title
         binding.tvBody.text = state.data.body
       }
-      is UiState.Error -> binding.tvError.text = state.error.asMessage()
+
+      is UiState.Error -> {
+        binding.tvError.text = state.error.asMessage()
+      }
     }
   }
 
-  private fun LoadError.asMessage(): String = when (this) {
-    LoadError.Network -> getString(R.string.error_network)
-    is LoadError.Http -> getString(R.string.error_http, code)
-    LoadError.Unknown -> getString(R.string.error_unknown)
-  }
+  private fun LoadError.asMessage(): String =
+    when (this) {
+      LoadError.Network -> getString(R.string.error_network)
+      is LoadError.Http -> getString(R.string.error_http, code)
+      LoadError.Unknown -> getString(R.string.error_unknown)
+    }
 
   override fun onDestroyView() {
     _binding = null

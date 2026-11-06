@@ -10,11 +10,12 @@ class DetailActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
 
-    val mahasiswa = IntentCompat.getSerializableExtra(
-      intent,
-      EXTRA_MAHASISWA,
-      Mahasiswa::class.java,
-    )
+    val mahasiswa =
+      IntentCompat.getSerializableExtra(
+        intent,
+        EXTRA_MAHASISWA,
+        Mahasiswa::class.java,
+      )
     if (mahasiswa == null) {
       finish()
       return

@@ -31,16 +31,20 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
 
   private lateinit var adapter: PostAdapter
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
     _binding = FragmentPostListBinding.bind(view)
 
-    adapter = PostAdapter { postId ->
-      findNavController().navigate(
-        R.id.action_list_to_detail,
-        Bundle().apply { putInt(NavArgs.POST_ID, postId) },
-      )
-    }
+    adapter =
+      PostAdapter { postId ->
+        findNavController().navigate(
+          R.id.action_list_to_detail,
+          Bundle().apply { putInt(NavArgs.POST_ID, postId) },
+        )
+      }
     binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
     binding.rvPosts.adapter = adapter
     binding.btnRetry.setOnClickListener { viewModel.load() }
@@ -65,11 +69,12 @@ class PostListFragment : Fragment(R.layout.fragment_post_list) {
     }
   }
 
-  private fun LoadError.asMessage(): String = when (this) {
-    LoadError.Network -> getString(R.string.error_network)
-    is LoadError.Http -> getString(R.string.error_http, code)
-    LoadError.Unknown -> getString(R.string.error_unknown)
-  }
+  private fun LoadError.asMessage(): String =
+    when (this) {
+      LoadError.Network -> getString(R.string.error_network)
+      is LoadError.Http -> getString(R.string.error_http, code)
+      LoadError.Unknown -> getString(R.string.error_unknown)
+    }
 
   override fun onDestroyView() {
     _binding = null

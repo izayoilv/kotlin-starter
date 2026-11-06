@@ -32,7 +32,11 @@ class AddTaskDialogFragment : DialogFragment() {
       .apply {
         setOnShowListener {
           getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val title = viewBinding.etTitle.text?.toString()?.trim().orEmpty()
+            val title =
+              viewBinding.etTitle.text
+                ?.toString()
+                ?.trim()
+                .orEmpty()
             if (title.isEmpty()) {
               viewBinding.tilTitle.error = getString(R.string.error_title_required)
             } else {

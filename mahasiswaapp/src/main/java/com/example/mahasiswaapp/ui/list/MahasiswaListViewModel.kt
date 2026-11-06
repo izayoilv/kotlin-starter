@@ -19,8 +19,13 @@ data class ListUiState(
 )
 
 sealed interface ListEvent {
-  data class Message(val text: String) : ListEvent
-  data class Error(val throwable: Throwable) : ListEvent
+  data class Message(
+    val text: String,
+  ) : ListEvent
+
+  data class Error(
+    val throwable: Throwable,
+  ) : ListEvent
 }
 
 class MahasiswaListViewModel(
@@ -39,7 +44,8 @@ class MahasiswaListViewModel(
   fun load() {
     viewModelScope.launch {
       _state.value = _state.value.copy(isLoading = true, error = null)
-      repository.getAll()
+      repository
+        .getAll()
         .onSuccess { _state.value = ListUiState(items = it) }
         .onFailure {
           _state.value = _state.value.copy(isLoading = false, error = it)
@@ -53,13 +59,13 @@ class MahasiswaListViewModel(
   fun delete(mahasiswa: Mahasiswa) {
     viewModelScope.launch {
       _state.value = _state.value.copy(isLoading = true)
-      repository.delete(mahasiswa)
+      repository
+        .delete(mahasiswa)
         .onSuccess { message ->
           _state.value = _state.value.copy(isLoading = false)
           _events.send(ListEvent.Message(message))
           load()
-        }
-        .onFailure {
+        }.onFailure {
           _state.value = _state.value.copy(isLoading = false)
           _events.send(ListEvent.Error(it))
         }

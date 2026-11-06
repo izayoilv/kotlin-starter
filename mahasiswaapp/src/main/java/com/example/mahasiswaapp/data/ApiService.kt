@@ -11,11 +11,17 @@ interface ApiService {
   suspend fun getAll(): ApiListResponse
 
   @POST("create.php")
-  suspend fun create(@Body mahasiswa: Mahasiswa): ApiMessageResponse
+  suspend fun create(
+    @Body mahasiswa: Mahasiswa,
+  ): ApiMessageResponse
 
   @PUT("update.php")
-  suspend fun update(@Body mahasiswa: Mahasiswa): ApiMessageResponse
+  suspend fun update(
+    @Body mahasiswa: Mahasiswa,
+  ): ApiMessageResponse
 
   @HTTP(method = "DELETE", path = "delete.php", hasBody = true)
-  suspend fun delete(@Body mahasiswa: Mahasiswa): ApiMessageResponse
+  suspend fun delete(
+    @Body mahasiswa: Mahasiswa,
+  ): ApiMessageResponse
 }

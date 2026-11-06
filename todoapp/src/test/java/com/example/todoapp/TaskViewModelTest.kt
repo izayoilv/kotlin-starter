@@ -7,8 +7,6 @@ import com.example.todoapp.data.Task
 import com.example.todoapp.data.TaskRepository
 import com.example.todoapp.ui.TaskViewModel
 import com.example.todoapp.ui.UiEvent
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
@@ -30,6 +28,8 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TaskViewModelTest {
@@ -53,70 +53,77 @@ class TaskViewModelTest {
   }
 
   @Test
-  fun addTaskTrimsTitleAndInserts() = runTest(dispatcher) {
-    assertTrue(viewModel.addTask("  Beli susu  "))
-    advanceUntilIdle()
-    assertEquals(listOf("Beli susu"), repository.tasks.value.map { it.title })
-  }
+  fun addTaskTrimsTitleAndInserts() =
+    runTest(dispatcher) {
+      assertTrue(viewModel.addTask("  Beli susu  "))
+      advanceUntilIdle()
+      assertEquals(listOf("Beli susu"), repository.tasks.value.map { it.title })
+    }
 
   @Test
-  fun addTaskRejectsBlankTitle() = runTest(dispatcher) {
-    assertFalse(viewModel.addTask("   "))
-    advanceUntilIdle()
-    assertTrue(repository.tasks.value.isEmpty())
-  }
+  fun addTaskRejectsBlankTitle() =
+    runTest(dispatcher) {
+      assertFalse(viewModel.addTask("   "))
+      advanceUntilIdle()
+      assertTrue(repository.tasks.value.isEmpty())
+    }
 
   @Test
-  fun counterReflectsUnfinishedTasks() = runTest(dispatcher) {
-    viewModel.addTask("A")
-    viewModel.addTask("B")
-    advanceUntilIdle()
-    val first = repository.tasks.value.first()
-    viewModel.setDone(first, true)
-    advanceUntilIdle()
-    assertEquals(1, viewModel.unfinishedCount.getOrAwaitValue { advanceUntilIdle() })
-  }
+  fun counterReflectsUnfinishedTasks() =
+    runTest(dispatcher) {
+      viewModel.addTask("A")
+      viewModel.addTask("B")
+      advanceUntilIdle()
+      val first = repository.tasks.value.first()
+      viewModel.setDone(first, true)
+      advanceUntilIdle()
+      assertEquals(1, viewModel.unfinishedCount.getOrAwaitValue { advanceUntilIdle() })
+    }
 
   @Test
-  fun deleteAndRestoreRoundTrip() = runTest(dispatcher) {
-    viewModel.addTask("A")
-    advanceUntilIdle()
-    val task = repository.tasks.value.single()
-    viewModel.delete(task)
-    advanceUntilIdle()
-    assertTrue(repository.tasks.value.isEmpty())
-    viewModel.restore(task)
-    advanceUntilIdle()
-    assertEquals(listOf(task.id), repository.tasks.value.map { it.id })
-  }
+  fun deleteAndRestoreRoundTrip() =
+    runTest(dispatcher) {
+      viewModel.addTask("A")
+      advanceUntilIdle()
+      val task = repository.tasks.value.single()
+      viewModel.delete(task)
+      advanceUntilIdle()
+      assertTrue(repository.tasks.value.isEmpty())
+      viewModel.restore(task)
+      advanceUntilIdle()
+      assertEquals(listOf(task.id), repository.tasks.value.map { it.id })
+    }
 
   @Test
-  fun writeFailureEmitsDatabaseError() = runTest(dispatcher) {
-    repository.failWrites = true
-    val event = async { viewModel.events.first() }
-    viewModel.addTask("Beli susu")
-    advanceUntilIdle()
-    assertEquals(UiEvent.DatabaseError, event.await())
-  }
+  fun writeFailureEmitsDatabaseError() =
+    runTest(dispatcher) {
+      repository.failWrites = true
+      val event = async { viewModel.events.first() }
+      viewModel.addTask("Beli susu")
+      advanceUntilIdle()
+      assertEquals(UiEvent.DatabaseError, event.await())
+    }
 
   @Test
-  fun deleteEmitsTaskDeleted() = runTest(dispatcher) {
-    viewModel.addTask("A")
-    advanceUntilIdle()
-    val task = repository.tasks.value.single()
-    val event = async { viewModel.events.first() }
-    viewModel.delete(task)
-    advanceUntilIdle()
-    assertEquals(UiEvent.TaskDeleted(task), event.await())
-  }
+  fun deleteEmitsTaskDeleted() =
+    runTest(dispatcher) {
+      viewModel.addTask("A")
+      advanceUntilIdle()
+      val task = repository.tasks.value.single()
+      val event = async { viewModel.events.first() }
+      viewModel.delete(task)
+      advanceUntilIdle()
+      assertEquals(UiEvent.TaskDeleted(task), event.await())
+    }
 
   @Test
-  fun readFailureEmitsDatabaseErrorAndEmptyList() = runTest(dispatcher) {
-    repository.failReads = true
-    val event = async { viewModel.events.first() }
-    assertTrue(viewModel.tasks.getOrAwaitValue { advanceUntilIdle() }.isEmpty())
-    assertEquals(UiEvent.DatabaseError, event.await())
-  }
+  fun readFailureEmitsDatabaseErrorAndEmptyList() =
+    runTest(dispatcher) {
+      repository.failReads = true
+      val event = async { viewModel.events.first() }
+      assertTrue(viewModel.tasks.getOrAwaitValue { advanceUntilIdle() }.isEmpty())
+      assertEquals(UiEvent.DatabaseError, event.await())
+    }
 }
 
 private class FakeTaskRepository : TaskRepository {
@@ -125,19 +132,22 @@ private class FakeTaskRepository : TaskRepository {
   var failReads = false
   private var nextId = 1L
 
-  override fun observeTasks(): Flow<List<Task>> = flow {
-    if (failReads) error("read failed") else emitAll(tasks)
-  }
+  override fun observeTasks(): Flow<List<Task>> =
+    flow {
+      if (failReads) error("read failed") else emitAll(tasks)
+    }
 
-  override fun observeUnfinishedCount(): Flow<Int> =
-    tasks.map { list -> list.count { !it.isDone } }
+  override fun observeUnfinishedCount(): Flow<Int> = tasks.map { list -> list.count { !it.isDone } }
 
   override suspend fun add(title: String) {
     failIfRequested()
     tasks.value = tasks.value + Task(id = nextId++, title = title, createdAt = nextId)
   }
 
-  override suspend fun setDone(task: Task, done: Boolean) {
+  override suspend fun setDone(
+    task: Task,
+    done: Boolean,
+  ) {
     failIfRequested()
     tasks.value = tasks.value.map { if (it.id == task.id) it.copy(isDone = done) else it }
   }
@@ -161,13 +171,14 @@ private class FakeTaskRepository : TaskRepository {
 private fun <T> LiveData<T>.getOrAwaitValue(afterObserve: () -> Unit = {}): T {
   var result: T? = null
   val latch = CountDownLatch(1)
-  val observer = object : Observer<T> {
-    override fun onChanged(value: T) {
-      result = value
-      latch.countDown()
-      this@getOrAwaitValue.removeObserver(this)
+  val observer =
+    object : Observer<T> {
+      override fun onChanged(value: T) {
+        result = value
+        latch.countDown()
+        this@getOrAwaitValue.removeObserver(this)
+      }
     }
-  }
   observeForever(observer)
   afterObserve()
   check(latch.await(2, TimeUnit.SECONDS)) { "LiveData value was never set." }

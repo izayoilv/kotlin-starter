@@ -14,8 +14,9 @@ class MainActivity : AppCompatActivity() {
     binding = ActivityMainBinding.inflate(layoutInflater)
     setContentView(binding.root)
 
-    val navHostFragment = supportFragmentManager
-      .findFragmentById(R.id.navHost) as NavHostFragment
+    val navHostFragment =
+      supportFragmentManager
+        .findFragmentById(R.id.navHost) as NavHostFragment
     binding.bottomNav.setupWithNavController(navHostFragment.navController)
   }
 }

@@ -24,18 +24,20 @@ object Database {
           """.trimIndent(),
         )
       }
-      val count = conn.createStatement().use { statement ->
-        statement.executeQuery("SELECT COUNT(*) FROM mahasiswa").use { rows ->
-          if (rows.next()) rows.getInt(1) else 0
+      val count =
+        conn.createStatement().use { statement ->
+          statement.executeQuery("SELECT COUNT(*) FROM mahasiswa").use { rows ->
+            if (rows.next()) rows.getInt(1) else 0
+          }
         }
-      }
       if (count == 0) seed(conn)
     }
   }
 
-  private fun connection(): Connection = DriverManager.getConnection(url).apply {
-    createStatement().use { it.execute("PRAGMA busy_timeout = 5000") }
-  }
+  private fun connection(): Connection =
+    DriverManager.getConnection(url).apply {
+      createStatement().use { it.execute("PRAGMA busy_timeout = 5000") }
+    }
 
   private fun seed(conn: Connection) {
     listOf(
@@ -45,25 +47,26 @@ object Database {
     ).forEach { insert(conn, it) }
   }
 
-  fun all(): List<Mahasiswa> = connection().use { conn ->
-    conn.prepareStatement("SELECT id, nim, nama, jurusan, email FROM mahasiswa ORDER BY id DESC").use { ps ->
-      ps.executeQuery().use { rows ->
-        buildList {
-          while (rows.next()) {
-            add(
-              Mahasiswa(
-                id = rows.getInt("id"),
-                nim = rows.getString("nim"),
-                nama = rows.getString("nama"),
-                jurusan = rows.getString("jurusan").orEmpty(),
-                email = rows.getString("email").orEmpty(),
-              ),
-            )
+  fun all(): List<Mahasiswa> =
+    connection().use { conn ->
+      conn.prepareStatement("SELECT id, nim, nama, jurusan, email FROM mahasiswa ORDER BY id DESC").use { ps ->
+        ps.executeQuery().use { rows ->
+          buildList {
+            while (rows.next()) {
+              add(
+                Mahasiswa(
+                  id = rows.getInt("id"),
+                  nim = rows.getString("nim"),
+                  nama = rows.getString("nama"),
+                  jurusan = rows.getString("jurusan").orEmpty(),
+                  email = rows.getString("email").orEmpty(),
+                ),
+              )
+            }
           }
         }
       }
     }
-  }
 
   fun create(mahasiswa: Mahasiswa): DbResult {
     connection().use { conn ->
@@ -85,16 +88,17 @@ object Database {
         return DbResult.Error("NIM sudah digunakan mahasiswa lain")
       }
       try {
-        conn.prepareStatement(
-          "UPDATE mahasiswa SET nim = ?, nama = ?, jurusan = ?, email = ? WHERE id = ?",
-        ).use { ps ->
-          ps.setString(1, mahasiswa.nim)
-          ps.setString(2, mahasiswa.nama)
-          ps.setString(3, mahasiswa.jurusan)
-          ps.setString(4, mahasiswa.email)
-          ps.setInt(5, mahasiswa.id)
-          ps.executeUpdate()
-        }
+        conn
+          .prepareStatement(
+            "UPDATE mahasiswa SET nim = ?, nama = ?, jurusan = ?, email = ? WHERE id = ?",
+          ).use { ps ->
+            ps.setString(1, mahasiswa.nim)
+            ps.setString(2, mahasiswa.nama)
+            ps.setString(3, mahasiswa.jurusan)
+            ps.setString(4, mahasiswa.email)
+            ps.setInt(5, mahasiswa.id)
+            ps.executeUpdate()
+          }
       } catch (e: SQLException) {
         if (e.isUniqueViolation()) return DbResult.Error("NIM sudah digunakan mahasiswa lain")
         throw e
@@ -114,24 +118,33 @@ object Database {
     return DbResult.Success("Data berhasil dihapus")
   }
 
-  private fun insert(conn: Connection, mahasiswa: Mahasiswa) {
-    conn.prepareStatement(
-      "INSERT INTO mahasiswa (nim, nama, jurusan, email) VALUES (?, ?, ?, ?)",
-    ).use { ps ->
-      ps.setString(1, mahasiswa.nim)
-      ps.setString(2, mahasiswa.nama)
-      ps.setString(3, mahasiswa.jurusan)
-      ps.setString(4, mahasiswa.email)
-      ps.executeUpdate()
-    }
+  private fun insert(
+    conn: Connection,
+    mahasiswa: Mahasiswa,
+  ) {
+    conn
+      .prepareStatement(
+        "INSERT INTO mahasiswa (nim, nama, jurusan, email) VALUES (?, ?, ?, ?)",
+      ).use { ps ->
+        ps.setString(1, mahasiswa.nim)
+        ps.setString(2, mahasiswa.nama)
+        ps.setString(3, mahasiswa.jurusan)
+        ps.setString(4, mahasiswa.email)
+        ps.executeUpdate()
+      }
   }
 
-  private fun nimExists(conn: Connection, nim: String, excludeId: Int?): Boolean {
-    val sql = if (excludeId == null) {
-      "SELECT 1 FROM mahasiswa WHERE nim = ?"
-    } else {
-      "SELECT 1 FROM mahasiswa WHERE nim = ? AND id != ?"
-    }
+  private fun nimExists(
+    conn: Connection,
+    nim: String,
+    excludeId: Int?,
+  ): Boolean {
+    val sql =
+      if (excludeId == null) {
+        "SELECT 1 FROM mahasiswa WHERE nim = ?"
+      } else {
+        "SELECT 1 FROM mahasiswa WHERE nim = ? AND id != ?"
+      }
     return conn.prepareStatement(sql).use { ps ->
       ps.setString(1, nim)
       if (excludeId != null) ps.setInt(2, excludeId)
@@ -139,12 +152,14 @@ object Database {
     }
   }
 
-  private fun existsById(conn: Connection, id: Int): Boolean =
+  private fun existsById(
+    conn: Connection,
+    id: Int,
+  ): Boolean =
     conn.prepareStatement("SELECT 1 FROM mahasiswa WHERE id = ?").use { ps ->
       ps.setInt(1, id)
       ps.executeQuery().use { it.next() }
     }
 
-  private fun SQLException.isUniqueViolation(): Boolean =
-    message?.contains("UNIQUE", ignoreCase = true) == true
+  private fun SQLException.isUniqueViolation(): Boolean = message?.contains("UNIQUE", ignoreCase = true) == true
 }

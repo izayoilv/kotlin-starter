@@ -23,14 +23,18 @@ class HomeFragment : Fragment() {
     return binding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
-    val adapter = ArticleAdapter { article ->
-      findNavController().navigate(
-        R.id.action_home_to_detail,
-        bundleOf("articleId" to article.id),
-      )
-    }
+    val adapter =
+      ArticleAdapter { article ->
+        findNavController().navigate(
+          R.id.action_home_to_detail,
+          bundleOf("articleId" to article.id),
+        )
+      }
     binding.articleList.layoutManager = LinearLayoutManager(requireContext())
     binding.articleList.adapter = adapter
     adapter.submitList(ArticleData.articles)

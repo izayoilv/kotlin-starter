@@ -24,12 +24,17 @@ class SettingsActivity : AppCompatActivity() {
     binding.showInfoSwitch.isChecked = prefs.showUserInfo
 
     binding.saveButton.setOnClickListener {
-      prefs.userName = binding.nameInput.text?.toString().orEmpty().trim()
-      prefs.fontSize = when (binding.fontGroup.checkedRadioButtonId) {
-        R.id.fontSmall -> FontSize.SMALL
-        R.id.fontLarge -> FontSize.LARGE
-        else -> FontSize.MEDIUM
-      }
+      prefs.userName =
+        binding.nameInput.text
+          ?.toString()
+          .orEmpty()
+          .trim()
+      prefs.fontSize =
+        when (binding.fontGroup.checkedRadioButtonId) {
+          R.id.fontSmall -> FontSize.SMALL
+          R.id.fontLarge -> FontSize.LARGE
+          else -> FontSize.MEDIUM
+        }
       prefs.showUserInfo = binding.showInfoSwitch.isChecked
       finish()
     }

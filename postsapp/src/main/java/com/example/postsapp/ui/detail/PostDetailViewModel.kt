@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class PostDetailViewModel(private val repository: PostRepository) : ViewModel() {
+class PostDetailViewModel(
+  private val repository: PostRepository,
+) : ViewModel() {
   private val _state = MutableStateFlow<UiState<Post>>(UiState.Loading)
   val state: StateFlow<UiState<Post>> = _state.asStateFlow()
   private var currentId: Int? = null
@@ -24,7 +26,8 @@ class PostDetailViewModel(private val repository: PostRepository) : ViewModel() 
     currentId = postId
     viewModelScope.launch {
       _state.value = UiState.Loading
-      repository.getPost(postId)
+      repository
+        .getPost(postId)
         .onSuccess { _state.value = UiState.Success(it) }
         .onFailure { _state.value = UiState.Error(it.toLoadError()) }
     }

@@ -4,7 +4,6 @@ import com.example.postsapp.data.LoadError
 import com.example.postsapp.data.Post
 import com.example.postsapp.ui.FakePostRepository
 import com.example.postsapp.ui.UiState
-import java.io.IOException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -19,6 +18,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PostDetailViewModelTest {
@@ -37,69 +37,74 @@ class PostDetailViewModelTest {
   }
 
   @Test
-  fun loadSuccessExposesPost() = runTest(dispatcher) {
-    val post = Post(1, 7, "Detail", "Isi lengkap")
-    repository.postResult = Result.success(post)
+  fun loadSuccessExposesPost() =
+    runTest(dispatcher) {
+      val post = Post(1, 7, "Detail", "Isi lengkap")
+      repository.postResult = Result.success(post)
 
-    val viewModel = PostDetailViewModel(repository)
-    viewModel.load(7)
-    advanceUntilIdle()
+      val viewModel = PostDetailViewModel(repository)
+      viewModel.load(7)
+      advanceUntilIdle()
 
-    assertEquals(UiState.Success(post), viewModel.state.value)
-    assertEquals(1, repository.getPostCalls)
-  }
-
-  @Test
-  fun httpFailureExposesCode() = runTest(dispatcher) {
-    repository.postResult = Result.failure(httpException(404))
-
-    val viewModel = PostDetailViewModel(repository)
-    viewModel.load(7)
-    advanceUntilIdle()
-
-    assertEquals(UiState.Error(LoadError.Http(404)), viewModel.state.value)
-  }
+      assertEquals(UiState.Success(post), viewModel.state.value)
+      assertEquals(1, repository.getPostCalls)
+    }
 
   @Test
-  fun sameIdSuccessDoesNotRefetch() = runTest(dispatcher) {
-    repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
-    val viewModel = PostDetailViewModel(repository)
-    viewModel.load(7)
-    advanceUntilIdle()
+  fun httpFailureExposesCode() =
+    runTest(dispatcher) {
+      repository.postResult = Result.failure(httpException(404))
 
-    viewModel.load(7)
-    advanceUntilIdle()
+      val viewModel = PostDetailViewModel(repository)
+      viewModel.load(7)
+      advanceUntilIdle()
 
-    assertEquals(1, repository.getPostCalls)
-  }
-
-  @Test
-  fun errorAllowsSameIdRetry() = runTest(dispatcher) {
-    repository.postResult = Result.failure(IOException("offline"))
-    val viewModel = PostDetailViewModel(repository)
-    viewModel.load(7)
-    advanceUntilIdle()
-    assertTrue(viewModel.state.value is UiState.Error)
-
-    repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
-    viewModel.load(7)
-    advanceUntilIdle()
-
-    assertTrue(viewModel.state.value is UiState.Success)
-    assertEquals(2, repository.getPostCalls)
-  }
+      assertEquals(UiState.Error(LoadError.Http(404)), viewModel.state.value)
+    }
 
   @Test
-  fun sameIdWhileLoadingDoesNotRefetch() = runTest(dispatcher) {
-    repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
-    val viewModel = PostDetailViewModel(repository)
+  fun sameIdSuccessDoesNotRefetch() =
+    runTest(dispatcher) {
+      repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
+      val viewModel = PostDetailViewModel(repository)
+      viewModel.load(7)
+      advanceUntilIdle()
 
-    viewModel.load(7)
-    viewModel.load(7)
-    advanceUntilIdle()
+      viewModel.load(7)
+      advanceUntilIdle()
 
-    assertEquals(1, repository.getPostCalls)
-  }
+      assertEquals(1, repository.getPostCalls)
+    }
+
+  @Test
+  fun errorAllowsSameIdRetry() =
+    runTest(dispatcher) {
+      repository.postResult = Result.failure(IOException("offline"))
+      val viewModel = PostDetailViewModel(repository)
+      viewModel.load(7)
+      advanceUntilIdle()
+      assertTrue(viewModel.state.value is UiState.Error)
+
+      repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
+      viewModel.load(7)
+      advanceUntilIdle()
+
+      assertTrue(viewModel.state.value is UiState.Success)
+      assertEquals(2, repository.getPostCalls)
+    }
+
+  @Test
+  fun sameIdWhileLoadingDoesNotRefetch() =
+    runTest(dispatcher) {
+      repository.postResult = Result.success(Post(1, 7, "Detail", "Isi"))
+      val viewModel = PostDetailViewModel(repository)
+
+      viewModel.load(7)
+      viewModel.load(7)
+      advanceUntilIdle()
+
+      assertEquals(1, repository.getPostCalls)
+    }
 
   private fun httpException(code: Int): retrofit2.HttpException =
     retrofit2.HttpException(

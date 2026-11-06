@@ -12,7 +12,12 @@ class ContactViewModelTest {
 
   @Test
   fun `initial list is empty`() {
-    assertTrue(ContactViewModel().contacts.value.orEmpty().isEmpty())
+    assertTrue(
+      ContactViewModel()
+        .contacts.value
+        .orEmpty()
+        .isEmpty(),
+    )
   }
 
   @Test
@@ -36,7 +41,10 @@ class ContactViewModelTest {
 
     viewModel.updateContact(1L, "Ada Lovelace", "999")
 
-    val contact = viewModel.contacts.value.orEmpty().single()
+    val contact =
+      viewModel.contacts.value
+        .orEmpty()
+        .single()
     assertEquals("Ada Lovelace", contact.name)
     assertEquals("999", contact.phone)
   }

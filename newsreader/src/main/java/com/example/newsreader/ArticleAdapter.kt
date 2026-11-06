@@ -10,13 +10,18 @@ import com.example.newsreader.databinding.ItemArticleBinding
 class ArticleAdapter(
   private val onReadMore: (Article) -> Unit,
 ) : ListAdapter<Article, ArticleAdapter.ArticleViewHolder>(DiffCallback) {
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): ArticleViewHolder {
     val binding = ItemArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return ArticleViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: ArticleViewHolder,
+    position: Int,
+  ) {
     holder.bind(getItem(position))
   }
 
@@ -31,10 +36,14 @@ class ArticleAdapter(
   }
 
   private object DiffCallback : DiffUtil.ItemCallback<Article>() {
-    override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean =
-      oldItem.id == newItem.id
+    override fun areItemsTheSame(
+      oldItem: Article,
+      newItem: Article,
+    ): Boolean = oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean =
-      oldItem == newItem
+    override fun areContentsTheSame(
+      oldItem: Article,
+      newItem: Article,
+    ): Boolean = oldItem == newItem
   }
 }

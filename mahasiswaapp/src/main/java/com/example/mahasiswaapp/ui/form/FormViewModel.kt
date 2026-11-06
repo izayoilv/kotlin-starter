@@ -13,8 +13,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 sealed interface FormEvent {
-  data class Saved(val message: String) : FormEvent
-  data class Error(val throwable: Throwable) : FormEvent
+  data class Saved(
+    val message: String,
+  ) : FormEvent
+
+  data class Error(
+    val throwable: Throwable,
+  ) : FormEvent
 }
 
 class FormViewModel(
@@ -26,7 +31,10 @@ class FormViewModel(
   private val _events = Channel<FormEvent>(Channel.BUFFERED)
   val events: Flow<FormEvent> = _events.receiveAsFlow()
 
-  fun save(mahasiswa: Mahasiswa, isEdit: Boolean) {
+  fun save(
+    mahasiswa: Mahasiswa,
+    isEdit: Boolean,
+  ) {
     if (_isSaving.value) return
     viewModelScope.launch {
       _isSaving.value = true

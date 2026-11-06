@@ -12,13 +12,18 @@ import com.example.postsapp.databinding.ItemPostBinding
 class PostAdapter(
   private val onClick: (Int) -> Unit,
 ) : ListAdapter<Post, PostAdapter.PostViewHolder>(DiffCallback) {
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): PostViewHolder {
     val binding = ItemPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return PostViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: PostViewHolder,
+    position: Int,
+  ) {
     holder.bind(getItem(position))
   }
 
@@ -34,8 +39,14 @@ class PostAdapter(
   }
 
   private object DiffCallback : DiffUtil.ItemCallback<Post>() {
-    override fun areItemsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem.id == newItem.id
+    override fun areItemsTheSame(
+      oldItem: Post,
+      newItem: Post,
+    ): Boolean = oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: Post, newItem: Post): Boolean = oldItem == newItem
+    override fun areContentsTheSame(
+      oldItem: Post,
+      newItem: Post,
+    ): Boolean = oldItem == newItem
   }
 }

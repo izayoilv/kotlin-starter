@@ -2,8 +2,10 @@ plugins {
   alias(libs.plugins.android.application)
 }
 
-val apiBaseUrl = providers.gradleProperty("apiBaseUrl")
-  .getOrElse("http://10.0.2.2:8080/")
+val apiBaseUrl =
+  providers
+    .gradleProperty("apiBaseUrl")
+    .getOrElse("http://10.0.2.2:8080/")
 
 android {
   namespace = "com.example.mahasiswaapp"

@@ -3,7 +3,9 @@ package com.example.notesapp
 import com.google.gson.Gson
 import java.io.File
 
-class NoteStorage(private val dir: File) {
+class NoteStorage(
+  private val dir: File,
+) {
   private val gson = Gson()
 
   fun listNotes(): List<Note> {

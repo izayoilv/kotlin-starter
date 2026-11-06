@@ -2,13 +2,18 @@ package com.example.notesapp
 
 import android.content.Context
 
-enum class FontSize(val prefValue: String, val sp: Float) {
+enum class FontSize(
+  val prefValue: String,
+  val sp: Float,
+) {
   SMALL("small", 14f),
   MEDIUM("medium", 18f),
   LARGE("large", 24f),
 }
 
-class PrefsManager(context: Context) {
+class PrefsManager(
+  context: Context,
+) {
   private val prefs = context.getSharedPreferences("notes_prefs", Context.MODE_PRIVATE)
 
   var userName: String

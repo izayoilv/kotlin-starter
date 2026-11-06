@@ -32,11 +32,12 @@ class MainActivity : AppCompatActivity() {
     )
   }
 
-  private val formLauncher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult(),
-  ) { result ->
-    if (result.resultCode == RESULT_OK) viewModel.load()
-  }
+  private val formLauncher =
+    registerForActivityResult(
+      ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+      if (result.resultCode == RESULT_OK) viewModel.load()
+    }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -44,11 +45,12 @@ class MainActivity : AppCompatActivity() {
     setContentView(binding.root)
     setSupportActionBar(binding.toolbar)
 
-    adapter = MahasiswaAdapter(
-      onClick = { openDetail(it) },
-      onEdit = { openForm(it) },
-      onDelete = { confirmDelete(it) },
-    )
+    adapter =
+      MahasiswaAdapter(
+        onClick = { openDetail(it) },
+        onEdit = { openForm(it) },
+        onDelete = { confirmDelete(it) },
+      )
     binding.rvMahasiswa.layoutManager = LinearLayoutManager(this)
     binding.rvMahasiswa.adapter = adapter
     binding.fabAdd.setOnClickListener { openForm(null) }
@@ -63,18 +65,23 @@ class MainActivity : AppCompatActivity() {
         launch {
           viewModel.events.collect { event ->
             when (event) {
-              is ListEvent.Message ->
-                Snackbar.make(
-                  binding.root,
-                  event.text.ifBlank { getString(R.string.success_generic) },
-                  Snackbar.LENGTH_SHORT,
-                ).show()
-              is ListEvent.Error ->
-                Snackbar.make(
-                  binding.root,
-                  event.throwable.toUserMessage(this@MainActivity),
-                  Snackbar.LENGTH_LONG,
-                ).show()
+              is ListEvent.Message -> {
+                Snackbar
+                  .make(
+                    binding.root,
+                    event.text.ifBlank { getString(R.string.success_generic) },
+                    Snackbar.LENGTH_SHORT,
+                  ).show()
+              }
+
+              is ListEvent.Error -> {
+                Snackbar
+                  .make(
+                    binding.root,
+                    event.throwable.toUserMessage(this@MainActivity),
+                    Snackbar.LENGTH_LONG,
+                  ).show()
+              }
             }
           }
         }

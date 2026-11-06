@@ -23,8 +23,9 @@ class MainActivity : AppCompatActivity() {
     registerForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
       if (uri != null) {
         try {
-          val stream = contentResolver.openOutputStream(uri)
-            ?: throw IOException("Export destination unavailable")
+          val stream =
+            contentResolver.openOutputStream(uri)
+              ?: throw IOException("Export destination unavailable")
           stream.use { it.write(storage.exportJson().toByteArray()) }
           Toast.makeText(this, R.string.export_success, Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
@@ -69,8 +70,11 @@ class MainActivity : AppCompatActivity() {
     binding.userHeader.visibility = if (prefs.showUserInfo) View.VISIBLE else View.GONE
     val name = prefs.userName
     binding.userHeader.text =
-      if (name.isBlank()) getString(R.string.default_greeting)
-      else getString(R.string.greeting, name)
+      if (name.isBlank()) {
+        getString(R.string.default_greeting)
+      } else {
+        getString(R.string.greeting, name)
+      }
   }
 
   private fun reload() {
@@ -79,16 +83,22 @@ class MainActivity : AppCompatActivity() {
 
   private fun showAddDialog() {
     val dialogBinding = DialogNoteEditorBinding.inflate(layoutInflater)
-    val dialog = AlertDialog.Builder(this)
-      .setTitle(R.string.add_note)
-      .setView(dialogBinding.root)
-      .setNegativeButton(R.string.cancel, null)
-      .setPositiveButton(R.string.save, null)
-      .create()
+    val dialog =
+      AlertDialog
+        .Builder(this)
+        .setTitle(R.string.add_note)
+        .setView(dialogBinding.root)
+        .setNegativeButton(R.string.cancel, null)
+        .setPositiveButton(R.string.save, null)
+        .create()
 
     dialog.show()
     dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-      val title = dialogBinding.titleInput.text?.toString().orEmpty().trim()
+      val title =
+        dialogBinding.titleInput.text
+          ?.toString()
+          .orEmpty()
+          .trim()
       if (title.isBlank()) {
         dialogBinding.titleLayout.error = getString(R.string.error_title_required)
         return@setOnClickListener
@@ -98,7 +108,10 @@ class MainActivity : AppCompatActivity() {
         Note(
           id = now,
           title = title,
-          body = dialogBinding.bodyInput.text?.toString().orEmpty(),
+          body =
+            dialogBinding.bodyInput.text
+              ?.toString()
+              .orEmpty(),
           author = prefs.userName.ifBlank { getString(R.string.default_author) },
           createdAt = now,
         ),
@@ -114,7 +127,8 @@ class MainActivity : AppCompatActivity() {
     viewer.viewerTitle.textSize = prefs.fontSize.sp
     viewer.viewerBody.text = note.body
     viewer.viewerBody.textSize = prefs.fontSize.sp
-    AlertDialog.Builder(this)
+    AlertDialog
+      .Builder(this)
       .setTitle(R.string.read_note)
       .setView(viewer.root)
       .setPositiveButton(R.string.ok, null)
@@ -122,13 +136,13 @@ class MainActivity : AppCompatActivity() {
   }
 
   private fun confirmDelete(note: Note) {
-    AlertDialog.Builder(this)
+    AlertDialog
+      .Builder(this)
       .setTitle(getString(R.string.delete_confirm, note.title))
       .setNegativeButton(R.string.cancel, null)
       .setPositiveButton(R.string.delete) { _, _ ->
         storage.delete(note.id)
         reload()
-      }
-      .show()
+      }.show()
   }
 }

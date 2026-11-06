@@ -42,8 +42,7 @@ class MainActivity : ComponentActivity() {
   }
 }
 
-private fun formatResult(value: Double): String =
-  if (value % 1.0 == 0.0) value.toLong().toString() else value.toString()
+private fun formatResult(value: Double): String = if (value % 1.0 == 0.0) value.toLong().toString() else value.toString()
 
 @Composable
 fun CalculatorScreen() {
@@ -55,12 +54,13 @@ fun CalculatorScreen() {
 
   fun inputDigit(digit: String) {
     lastEquation = null
-    display = if (freshInput || display == "0" || display == "Error") {
-      freshInput = false
-      digit
-    } else {
-      display + digit
-    }
+    display =
+      if (freshInput || display == "0" || display == "Error") {
+        freshInput = false
+        digit
+      } else {
+        display + digit
+      }
   }
 
   fun inputDot() {
@@ -104,12 +104,13 @@ fun CalculatorScreen() {
       freshInput = true
       return
     }
-    val result = when (op) {
-      "+" -> first + second
-      "−" -> first - second
-      "×" -> first * second
-      else -> first / second
-    }
+    val result =
+      when (op) {
+        "+" -> first + second
+        "−" -> first - second
+        "×" -> first * second
+        else -> first / second
+      }
     lastEquation = "${formatResult(first)} $op ${formatResult(second)} ="
     display = formatResult(result)
     firstOperand = null
@@ -134,11 +135,12 @@ fun CalculatorScreen() {
   Column(modifier = Modifier.fillMaxSize().navigationBarsPadding().padding(16.dp)) {
     val op = pendingOp
     val first = firstOperand
-    val expression = if (op != null && first != null) {
-      "${formatResult(first)} $op"
-    } else {
-      lastEquation.orEmpty()
-    }
+    val expression =
+      if (op != null && first != null) {
+        "${formatResult(first)} $op"
+      } else {
+        lastEquation.orEmpty()
+      }
     Box(
       modifier = Modifier.fillMaxWidth().weight(1f),
       contentAlignment = Alignment.BottomEnd,
@@ -191,9 +193,10 @@ fun CalculatorScreen() {
 }
 
 @Composable
-private fun operatorColors(): ButtonColors = ButtonDefaults.buttonColors(
-  containerColor = MaterialTheme.colorScheme.primaryContainer,
-)
+private fun operatorColors(): ButtonColors =
+  ButtonDefaults.buttonColors(
+    containerColor = MaterialTheme.colorScheme.primaryContainer,
+  )
 
 @Composable
 fun CalcRow(content: @Composable RowScope.() -> Unit) {

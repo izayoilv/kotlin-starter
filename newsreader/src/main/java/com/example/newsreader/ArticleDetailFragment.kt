@@ -20,7 +20,10 @@ class ArticleDetailFragment : Fragment() {
     return binding.root
   }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+  override fun onViewCreated(
+    view: View,
+    savedInstanceState: Bundle?,
+  ) {
     super.onViewCreated(view, savedInstanceState)
     val articleId = arguments?.getInt("articleId") ?: -1
     val article = ArticleData.byId(articleId)

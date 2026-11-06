@@ -7,7 +7,8 @@ object RetrofitClient {
   private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
   val api: PostApi by lazy {
-    Retrofit.Builder()
+    Retrofit
+      .Builder()
       .baseUrl(BASE_URL)
       .addConverterFactory(GsonConverterFactory.create())
       .build()

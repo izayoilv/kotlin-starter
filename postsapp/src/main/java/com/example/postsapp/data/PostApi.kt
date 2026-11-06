@@ -8,5 +8,7 @@ interface PostApi {
   suspend fun getPosts(): List<Post>
 
   @GET("posts/{id}")
-  suspend fun getPost(@Path("id") id: Int): Post
+  suspend fun getPost(
+    @Path("id") id: Int,
+  ): Post
 }

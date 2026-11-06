@@ -11,13 +11,18 @@ class ContactAdapter(
   private val onClick: (Contact) -> Unit,
   private val onLongClick: (Contact) -> Unit,
 ) : ListAdapter<Contact, ContactAdapter.ContactViewHolder>(DiffCallback) {
-
-  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
+  override fun onCreateViewHolder(
+    parent: ViewGroup,
+    viewType: Int,
+  ): ContactViewHolder {
     val binding = ItemContactBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     return ContactViewHolder(binding)
   }
 
-  override fun onBindViewHolder(holder: ContactViewHolder, position: Int) {
+  override fun onBindViewHolder(
+    holder: ContactViewHolder,
+    position: Int,
+  ) {
     holder.bind(getItem(position), onClick, onLongClick)
   }
 
@@ -41,10 +46,14 @@ class ContactAdapter(
   }
 
   private object DiffCallback : DiffUtil.ItemCallback<Contact>() {
-    override fun areItemsTheSame(oldItem: Contact, newItem: Contact): Boolean =
-      oldItem.id == newItem.id
+    override fun areItemsTheSame(
+      oldItem: Contact,
+      newItem: Contact,
+    ): Boolean = oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: Contact, newItem: Contact): Boolean =
-      oldItem == newItem
+    override fun areContentsTheSame(
+      oldItem: Contact,
+      newItem: Contact,
+    ): Boolean = oldItem == newItem
   }
 }

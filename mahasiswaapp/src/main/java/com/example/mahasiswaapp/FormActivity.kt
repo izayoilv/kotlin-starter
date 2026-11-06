@@ -62,20 +62,24 @@ class FormActivity : AppCompatActivity() {
           viewModel.events.collect { event ->
             when (event) {
               is FormEvent.Saved -> {
-                Toast.makeText(
-                  this@FormActivity,
-                  event.message.ifBlank { getString(R.string.success_generic) },
-                  Toast.LENGTH_SHORT,
-                ).show()
+                Toast
+                  .makeText(
+                    this@FormActivity,
+                    event.message.ifBlank { getString(R.string.success_generic) },
+                    Toast.LENGTH_SHORT,
+                  ).show()
                 setResult(RESULT_OK)
                 finish()
               }
-              is FormEvent.Error ->
-                Snackbar.make(
-                  binding.root,
-                  event.throwable.toUserMessage(this@FormActivity),
-                  Snackbar.LENGTH_LONG,
-                ).show()
+
+              is FormEvent.Error -> {
+                Snackbar
+                  .make(
+                    binding.root,
+                    event.throwable.toUserMessage(this@FormActivity),
+                    Snackbar.LENGTH_LONG,
+                  ).show()
+              }
             }
           }
         }
@@ -84,10 +88,26 @@ class FormActivity : AppCompatActivity() {
   }
 
   private fun save() {
-    val nim = binding.etNim.text?.toString()?.trim().orEmpty()
-    val nama = binding.etNama.text?.toString()?.trim().orEmpty()
-    val jurusan = binding.etJurusan.text?.toString()?.trim().orEmpty()
-    val email = binding.etEmail.text?.toString()?.trim().orEmpty()
+    val nim =
+      binding.etNim.text
+        ?.toString()
+        ?.trim()
+        .orEmpty()
+    val nama =
+      binding.etNama.text
+        ?.toString()
+        ?.trim()
+        .orEmpty()
+    val jurusan =
+      binding.etJurusan.text
+        ?.toString()
+        ?.trim()
+        .orEmpty()
+    val email =
+      binding.etEmail.text
+        ?.toString()
+        ?.trim()
+        .orEmpty()
 
     binding.tilNim.error = null
     binding.tilNama.error = null
@@ -112,6 +132,7 @@ class FormActivity : AppCompatActivity() {
         binding.tilEmail.error = getString(R.string.error_email_required)
         valid = false
       }
+
       !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
         binding.tilEmail.error = getString(R.string.error_email_invalid)
         valid = false

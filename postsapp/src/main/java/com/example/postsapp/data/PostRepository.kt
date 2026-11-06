@@ -4,10 +4,13 @@ import kotlinx.coroutines.CancellationException
 
 interface PostRepository {
   suspend fun getPosts(): Result<List<Post>>
+
   suspend fun getPost(id: Int): Result<Post>
 }
 
-class NetworkPostRepository(private val api: PostApi) : PostRepository {
+class NetworkPostRepository(
+  private val api: PostApi,
+) : PostRepository {
   override suspend fun getPosts(): Result<List<Post>> = safeCall { api.getPosts() }
 
   override suspend fun getPost(id: Int): Result<Post> = safeCall { api.getPost(id) }
