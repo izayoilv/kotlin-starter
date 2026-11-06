@@ -14,7 +14,7 @@ dependencyResolutionManagement {
 }
 plugins {
   id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
-  id("io.github.ben-manes.versions.settings") version "0.61.0"
+  id("io.github.ben-manes.versions.settings") version "0.67.0"
 }
 rootProject.name = "kotlin-starter"
 include(":login", ":calc", ":contact", ":newsreader", ":notesapp", ":todoapp", ":postsapp", ":mahasiswaapp", ":mahasiswaapi")
