@@ -1,6 +1,11 @@
 plugins {
   alias(libs.plugins.android.application)
+  alias(libs.plugins.kotlin.compose)
+  alias(libs.plugins.kotlin.serialization)
+  alias(libs.plugins.ksp)
 }
+
+val notesApiUrl = providers.gradleProperty("notesApiUrl").getOrElse("http://10.0.2.2:8081")
 
 android {
   namespace = "com.example.notesapp"
@@ -12,6 +17,7 @@ android {
     targetSdk = 37
     versionCode = 1
     versionName = "1.0"
+    buildConfigField("String", "API_BASE_URL", "\"$notesApiUrl\"")
   }
 
   buildTypes {
@@ -26,7 +32,8 @@ android {
   }
 
   buildFeatures {
-    viewBinding = true
+    compose = true
+    buildConfig = true
   }
 }
 
@@ -36,12 +43,24 @@ java {
   }
 }
 
+kotlin {
+  jvmToolchain(21)
+}
+
 dependencies {
-  implementation(libs.appcompat)
   implementation(libs.core.ktx)
-  implementation(libs.activity.ktx)
-  implementation(libs.constraintlayout)
-  implementation(libs.material)
-  implementation(libs.gson)
+  implementation(libs.activity.compose)
+  implementation(platform(libs.compose.bom))
+  implementation(libs.compose.ui)
+  implementation(libs.compose.material3)
+  implementation(libs.compose.material.icons.core)
+  implementation(libs.compose.ui.tooling.preview)
+  debugImplementation(libs.compose.ui.tooling)
+  implementation(libs.lifecycle.runtime.compose)
+  implementation(libs.lifecycle.viewmodel.compose)
+  implementation(libs.navigation3.runtime)
+  implementation(libs.navigation3.ui)
+  implementation(libs.lifecycle.viewmodel.navigation3)
+  implementation(libs.kotlinx.serialization.json)
   testImplementation(libs.junit)
 }

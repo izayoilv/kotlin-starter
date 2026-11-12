@@ -1,29 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="app_name">Notes App</string>
-  <string name="default_greeting">Halo!</string>
-  <string name="greeting">Halo, %1$s</string>
+  <string name="notes_title">Catatan</string>
   <string name="add_note">Tambah Catatan</string>
-  <string name="read_note">Baca Catatan</string>
   <string name="title_hint">Judul</string>
   <string name="body_hint">Isi catatan</string>
-  <string name="error_title_required">Judul tidak boleh kosong</string>
-  <string name="default_author">Anonim</string>
   <string name="save">Simpan</string>
   <string name="cancel">Batal</string>
   <string name="delete">Hapus</string>
   <string name="delete_confirm">Hapus %1$s?</string>
-  <string name="ok">OK</string>
-  <string name="add">Tambah</string>
-  <string name="settings">Pengaturan</string>
-  <string name="export">Ekspor</string>
-  <string name="export_success">Catatan diekspor</string>
-  <string name="export_failed">Gagal mengekspor</string>
-  <string name="settings_title">Pengaturan</string>
-  <string name="name_hint">Nama pengguna</string>
-  <string name="font_size_label">Ukuran font</string>
-  <string name="font_small">Kecil</string>
-  <string name="font_medium">Sedang</string>
-  <string name="font_large">Besar</string>
-  <string name="show_info">Tampilkan info pengguna</string>
+  <string name="back">Kembali</string>
+  <string name="empty_notes">Belum ada catatan</string>
+  <string name="error_title_required">Judul tidak boleh kosong</string>
+  <string name="error_network">Tidak dapat terhubung ke server</string>
+  <string name="error_generic">Terjadi kesalahan</string>
+  <string name="retry">Coba lagi</string>
+  <string name="note_not_found">Catatan tidak ditemukan</string>
+  <string name="loading">Memuat...</string>
+  <string name="delete_failed">Gagal menghapus catatan</string>
+  <string name="save_failed">Gagal menyimpan catatan</string>
 </resources>
