@@ -43,7 +43,7 @@ fun Application.configure(repository: NotesRepository) {
     exception<BadRequestException> { call, _ ->
       call.respond(HttpStatusCode.BadRequest, ApiError("Permintaan tidak valid"))
     }
-    exception<Throwable> { call, cause ->
+    exception<Exception> { call, cause ->
       if (cause is CancellationException) throw cause
       this@configure.environment.log.error("Unhandled error", cause)
       call.respond(HttpStatusCode.InternalServerError, ApiError("Terjadi kesalahan server"))
