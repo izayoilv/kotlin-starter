@@ -3,6 +3,7 @@ plugins {
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.kotlin.serialization)
   alias(libs.plugins.ksp)
+  alias(libs.plugins.hilt)
 }
 
 val notesApiUrl = providers.gradleProperty("notesApiUrl").getOrElse("http://10.0.2.2:8081")
@@ -47,6 +48,10 @@ kotlin {
   jvmToolchain(21)
 }
 
+ksp {
+  arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
   implementation(libs.core.ktx)
   implementation(libs.activity.compose)
@@ -62,5 +67,19 @@ dependencies {
   implementation(libs.navigation3.ui)
   implementation(libs.lifecycle.viewmodel.navigation3)
   implementation(libs.kotlinx.serialization.json)
+  implementation(libs.room.runtime)
+  implementation(libs.room.ktx)
+  ksp(libs.room.compiler)
+  implementation(libs.hilt.android)
+  ksp(libs.hilt.compiler)
+  implementation(libs.androidx.hilt.navigation.compose)
+  implementation(libs.ktor.client.core)
+  implementation(libs.ktor.client.okhttp)
+  implementation(libs.ktor.client.content.negotiation)
+  implementation(libs.ktor.serialization.kotlinx.json)
+  implementation(libs.coroutines.android)
   testImplementation(libs.junit)
+  testImplementation(libs.coroutines.test)
+  testImplementation(libs.turbine)
+  testImplementation(libs.ktor.client.mock)
 }
