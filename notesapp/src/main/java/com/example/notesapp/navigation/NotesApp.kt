@@ -1,22 +1,50 @@
 package com.example.notesapp.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
+import com.example.notesapp.view.notes.NotesListScreen
+import com.example.notesapp.viewmodel.NotesViewModel
+import kotlinx.serialization.Serializable
+
+@Serializable
+data object NotesList : NavKey
+
+@Serializable
+data class NoteDetail(
+  val noteId: Long,
+) : NavKey
+
+@Serializable
+data object NoteEditor : NavKey
 
 @Composable
 fun NotesApp() {
-  Scaffold { padding ->
-    Box(
-      modifier = Modifier.fillMaxSize().padding(padding),
-      contentAlignment = Alignment.Center,
-    ) {
-      Text("Catatan")
-    }
-  }
+  val backStack = rememberNavBackStack(NotesList)
+
+  NavDisplay(
+    backStack = backStack,
+    onBack = { backStack.removeLastOrNull() },
+    entryDecorators =
+      listOf(
+        rememberSaveableStateHolderNavEntryDecorator(),
+        rememberViewModelStoreNavEntryDecorator(),
+      ),
+    entryProvider =
+      entryProvider {
+        entry<NotesList> {
+          val viewModel: NotesViewModel = hiltViewModel()
+          NotesListScreen(
+            viewModel = viewModel,
+            onAdd = {},
+            onNoteClick = {},
+          )
+        }
+      },
+  )
 }
