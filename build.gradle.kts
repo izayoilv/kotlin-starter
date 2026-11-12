@@ -6,6 +6,8 @@ plugins {
   alias(libs.plugins.kotlin.compose) apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.kotlin.jvm) apply false
+  alias(libs.plugins.kotlin.serialization) apply false
+  alias(libs.plugins.hilt) apply false
 }
 
 // The wrapper task rewrites gradle-wrapper.properties, so keep these here.

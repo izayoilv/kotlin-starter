@@ -13,3 +13,6 @@ google-services.json
 .kotlin/
 mahasiswaapi/*.db
 mahasiswaapi/*.db-journal
+notesapi/notes.db
+notesapi/notes.db-shm
+notesapi/notes.db-wal
