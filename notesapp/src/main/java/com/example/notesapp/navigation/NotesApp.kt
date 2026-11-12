@@ -8,7 +8,11 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.example.notesapp.view.detail.NoteDetailScreen
+import com.example.notesapp.view.editor.NoteEditorScreen
 import com.example.notesapp.view.notes.NotesListScreen
+import com.example.notesapp.viewmodel.NoteDetailViewModel
+import com.example.notesapp.viewmodel.NoteEditorViewModel
 import com.example.notesapp.viewmodel.NotesViewModel
 import kotlinx.serialization.Serializable
 
@@ -41,8 +45,24 @@ fun NotesApp() {
           val viewModel: NotesViewModel = hiltViewModel()
           NotesListScreen(
             viewModel = viewModel,
-            onAdd = {},
-            onNoteClick = {},
+            onAdd = { backStack.add(NoteEditor) },
+            onNoteClick = { backStack.add(NoteDetail(it)) },
+          )
+        }
+        entry<NoteDetail> { key ->
+          val viewModel: NoteDetailViewModel = hiltViewModel()
+          NoteDetailScreen(
+            viewModel = viewModel,
+            noteId = key.noteId,
+            onBack = { backStack.removeLastOrNull() },
+          )
+        }
+        entry<NoteEditor> {
+          val viewModel: NoteEditorViewModel = hiltViewModel()
+          NoteEditorScreen(
+            viewModel = viewModel,
+            onBack = { backStack.removeLastOrNull() },
+            onSaved = { backStack.removeLastOrNull() },
           )
         }
       },
