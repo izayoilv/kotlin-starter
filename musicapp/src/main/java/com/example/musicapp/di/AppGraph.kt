@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import com.example.musicapp.data.DownloadNotifications
 import com.example.musicapp.data.MusicDownloadRepository
 import com.example.musicapp.data.MusicDownloader
+import com.example.musicapp.data.MusicPlayerFactory
 import com.example.musicapp.data.WorkManagerMusicDownloadRepository
 import com.example.musicapp.worker.MetroWorkerFactory
 import dev.zacsweers.metro.AppScope
@@ -60,6 +61,9 @@ interface AppGraph : ViewModelGraph {
   @SingleIn(AppScope::class)
   fun provideRepository(workManager: WorkManager): MusicDownloadRepository =
     WorkManagerMusicDownloadRepository(workManager)
+
+  @Provides
+  fun providePlayerFactory(context: Context): MusicPlayerFactory = MusicPlayerFactory(context)
 
   @DependencyGraph.Factory
   fun interface Factory {

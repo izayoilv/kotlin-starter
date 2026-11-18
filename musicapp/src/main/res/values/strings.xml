@@ -4,10 +4,11 @@
   <string name="title">Music Downloader</string>
   <string name="url_hint">URL lagu (MP3)</string>
   <string name="file_name_hint">Nama file (opsional)</string>
-  <string name="wifi_only">Hanya unduh saat WiFi</string>
+  <string name="wifi_only">Hanya unduh saat ada WiFi</string>
   <string name="download">Unduh Lagu</string>
   <string name="cancel">Batal</string>
   <string name="idle">Belum ada unduhan</string>
+  <string name="status">Status unduhan</string>
   <string name="waiting">Menunggu koneksi/percobaan ulang</string>
   <string name="downloading">Mengunduh...</string>
   <string name="completed">Unduhan selesai</string>
