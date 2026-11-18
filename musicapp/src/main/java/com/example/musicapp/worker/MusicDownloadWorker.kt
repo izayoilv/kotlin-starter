@@ -8,6 +8,7 @@ import com.example.musicapp.data.DownloadNotifications
 import com.example.musicapp.data.HttpStatusException
 import com.example.musicapp.data.MusicDownloader
 import com.example.musicapp.model.DownloadContract
+import com.example.musicapp.model.RetryPolicy
 import com.example.musicapp.model.UrlValidator
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
@@ -48,13 +49,13 @@ class MusicDownloadWorker(
     } catch (e: CancellationException) {
       throw e
     } catch (e: HttpStatusException) {
-      if (e.code in 500..599 && runAttemptCount < DownloadContract.MAX_ATTEMPTS) {
+      if (e.code in 500..599 && RetryPolicy.shouldRetry(runAttemptCount)) {
         Result.retry()
       } else {
         fail(e.message ?: "HTTP ${e.code}")
       }
     } catch (e: IOException) {
-      if (runAttemptCount < DownloadContract.MAX_ATTEMPTS) {
+      if (RetryPolicy.shouldRetry(runAttemptCount)) {
         Result.retry()
       } else {
         fail(e.message ?: "Koneksi gagal")
