@@ -17,4 +17,4 @@ plugins {
   id("io.github.ben-manes.versions.settings") version "0.67.0"
 }
 rootProject.name = "kotlin-starter"
-include(":login", ":calc", ":contact", ":newsreader", ":notesapp", ":todoapp", ":postsapp", ":mahasiswaapp", ":mahasiswaapi", ":notesapi")
+include(":login", ":calc", ":contact", ":newsreader", ":notesapp", ":todoapp", ":postsapp", ":mahasiswaapp", ":mahasiswaapi", ":notesapi", ":musicapp")

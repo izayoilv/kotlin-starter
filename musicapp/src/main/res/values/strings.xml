@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">Music Downloader</string>
+  <string name="title">Music Downloader</string>
+  <string name="url_hint">URL lagu (MP3)</string>
+  <string name="file_name_hint">Nama file (opsional)</string>
+  <string name="wifi_only">Hanya unduh saat WiFi</string>
+  <string name="download">Unduh Lagu</string>
+  <string name="cancel">Batal</string>
+  <string name="idle">Belum ada unduhan</string>
+  <string name="waiting">Menunggu koneksi/percobaan ulang</string>
+  <string name="downloading">Mengunduh...</string>
+  <string name="completed">Unduhan selesai</string>
+  <string name="failed">Unduhan gagal</string>
+  <string name="cancelled">Unduhan dibatalkan</string>
+  <string name="saved_in_downloads">Tersimpan di Downloads</string>
+  <string name="play">Putar</string>
+  <string name="pause">Jeda</string>
+  <string name="notification_permission">Aktifkan notifikasi agar unduhan selesai diberitahukan.</string>
+  <string name="storage_permission">Izin penyimpanan diperlukan untuk menulis ke Downloads.</string>
+  <string name="allow">Izinkan</string>
+  <string name="url_blank">URL tidak boleh kosong</string>
+  <string name="url_invalid">URL tidak valid</string>
+  <string name="generic_error">Terjadi kesalahan</string>
+</resources>
